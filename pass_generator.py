@@ -10,6 +10,9 @@ def getFileLines():
     with open("senhas.txt", "r") as f:
         return len(f.readlines())
 
+def passNameInTxtFile():
+    return input("Insira um nome para ser colocado junto a senha no arquivo de texto: ")
+
 password = ""
 characterNumber = 0
 charset = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%!"
@@ -32,8 +35,6 @@ for i in range(int(characterNumber)):
     password += charset[math.floor(random() * len(charset))]
 
 print("\nTua senha é: " + password)
-print("\nEssa senha estará disponivel em um arquivo de texto criado neste mesmo diretório")
-print("Você pode copiar a senha deste pronpt e verifica novamente depois neste arquivo")
 
 fileLinesLenght = 0
 if verifyFileExists():
@@ -42,9 +43,12 @@ if verifyFileExists():
 file = open("senhas.txt", "a")
 
 if fileLinesLenght > 0:
-    file.write("\n" + password)
+    file.write("\n" + passNameInTxtFile() + ": " + password)
 else:
-    file.write(password)
+    file.write(passNameInTxtFile() + ": " + password)
+
+print("\nEssa senha estará disponivel em um arquivo de texto criado neste mesmo diretório")
+print("Você pode copiar a senha deste pronpt e verifica novamente depois neste arquivo")
 
 file.close()
 sleep(5)
