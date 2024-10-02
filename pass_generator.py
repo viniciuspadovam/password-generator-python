@@ -3,6 +3,10 @@ import os
 from random import random
 from time import sleep
 
+password = ""
+characterNumber = 0
+charset = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%!@$"
+
 def verifyFileExists():
     return os.path.exists("./senhas.txt")
 
@@ -13,9 +17,11 @@ def getFileLines():
 def passNameInTxtFile():
     return input("Insira um nome para ser colocado junto a senha no arquivo de texto: ")
 
-password = ""
-characterNumber = 0
-charset = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%!"
+def generatePassword():
+    global password
+    password = ""
+    for i in range(int(characterNumber)):
+        password += charset[math.floor(random() * len(charset))]
 
 print("===== Gerador de senha =====")
 isCharacterNumberValid = False
@@ -28,27 +34,37 @@ while not isCharacterNumberValid:
             raise Exception("Valor inválido")
         isCharacterNumberValid = True
     except:
-        print("Ops... Parece que você digitou um valor invaálido, tente novamente.\n")
+        print("Ops... Parece que você digitou um valor inválido, tente novamente.\n")
         isCharacterNumberValid = False
 
-for i in range(int(characterNumber)):
-    password += charset[math.floor(random() * len(charset))]
+generatePassword()
 
-print("\nTua senha é: " + password)
+remakePass = "Y"
+while remakePass == "Y":
+    try:
+        print("\nSua senha é: " + password)
+        remakePass = input("\n\nDeseja recriar a senha (y/n)? ").upper()
+        if remakePass == "Y":
+            generatePassword()
+        elif remakePass == "N":
+            fileLinesLenght = 0
+            if verifyFileExists():
+                fileLinesLenght = getFileLines()
 
-fileLinesLenght = 0
-if verifyFileExists():
-    fileLinesLenght = getFileLines()
+            file = open("senhas.txt", "a")
 
-file = open("senhas.txt", "a")
+            if fileLinesLenght > 0:
+                file.write("\n" + passNameInTxtFile() + ": " + password)
+            else:
+                file.write(passNameInTxtFile() + ": " + password)
 
-if fileLinesLenght > 0:
-    file.write("\n" + passNameInTxtFile() + ": " + password)
-else:
-    file.write(passNameInTxtFile() + ": " + password)
-
-print("\nEssa senha estará disponivel em um arquivo de texto criado neste mesmo diretório")
-print("Você pode copiar a senha deste pronpt e verifica novamente depois neste arquivo")
+            print("\nEssa senha estará disponivel em um arquivo de texto criado neste mesmo diretório")
+            print("Você pode copiar a senha deste pronpt e verifica novamente depois neste arquivo")
+        else:
+            raise Exception("Valor inválido")
+    except:
+        print("Ops... Parece que você digitou um valor inválido, tente novamente.\n")
+        remakePass = "Y"
 
 file.close()
 sleep(5)
