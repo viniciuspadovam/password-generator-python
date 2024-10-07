@@ -1,21 +1,34 @@
 import math
-import os
+import keyboard, sys, os
 from random import random
 from time import sleep
+from threading import Thread
 
 password = ""
 characterNumber = 0
 charset = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%!@$"
 
+
+def killScriptOnCtrlC():
+    while True:
+        if keyboard.is_pressed('ctrl+c'):
+            os._exit(0)
+            sys.exit()
+            break                       
+
+
 def verifyFileExists():
     return os.path.exists("./senhas.txt")
+
 
 def getFileLines():
     with open("senhas.txt", "r") as f:
         return len(f.readlines())
 
+
 def passNameInTxtFile():
     return input("Insira um nome para ser colocado junto a senha no arquivo de texto: ")
+
 
 def generatePassword():
     global password
@@ -23,7 +36,11 @@ def generatePassword():
     for i in range(int(characterNumber)):
         password += charset[math.floor(random() * len(charset))]
 
-print("===== Gerador de senha =====")
+
+Thread(target = killScriptOnCtrlC).start()
+
+print("=============================== Gerador de senha ===============================")
+print("Para interromper a aplicação a qualquer momento, basta pressionar 'Ctrl + C'.\n")
 isCharacterNumberValid = False
 while not isCharacterNumberValid:
     try:
