@@ -60,7 +60,7 @@ remakePass = "Y"
 while remakePass == "Y":
     try:
         print("\nSua senha é: " + password)
-        remakePass = input("\n\nDeseja recriar a senha (y/n)? ").upper()
+        remakePass = input("\n\nDeseja recriar a senha (y/N)? ").upper() or "N"
         if remakePass == "Y":
             generatePassword()
         elif remakePass == "N":
